@@ -2,6 +2,8 @@
 # created by Luke Wilde, on 05/03/2020
 # fixed 09/20/2022
 
+#works with dataset where each row has an ORDER, LENGTH, and COUNT entry. Manually multiply the COUNT * computed BIOMASS to obtain total estimate.
+
 setwd("")
 
 data <- read.csv("data.csv")
@@ -13,15 +15,18 @@ names(data)
 #---------------------------------#
 ##------CHECK 1: If any of this is FALSE, STOP AND FIX NAMES to be exactly as written-------##
 #Names need to be in all caps
+#check especially for extra spaces
 table(data$ORDER %in% c("ACARI","ANNELIDA","ARANEAE","COLEOPTERA","COLEOPTERA LARVA","COLLEMBOLA","DERMAPTERA","DERMAPTERA LARVA","DIPTERA","DIPTERA LARVA","EMPTY","HEMIPTERA","HEMIPTERA LARVA","HYMENOPTERA","HYMENOPTERA/FORMICOIDEA","LEPIDOPTERA","LEPIDOPTERA LARVA","MOLLUSCA","ODONATA","ODONATA LARVA","ORTHOPTERA","PLECOPTERA","UNKNOWN"))
 
 
-##------CHECK 2: Make sure that the columns are in the correct format-------##
-#define variable classes
+##------CHECK 2: Make sure that the columns are present and in the correct format-------##
+table(names(data) %in% c("ORDER", "LENGTH"))
+
+#then, define variable classes
 data$ORDER <- as.factor(data$ORDER)
 data$LENGTH <-as.numeric(data$LENGTH)
 
-##---------CHECK #: if either of these are true, then add small constant to eliminate errors from taking the log of lengths -------##
+##---------CHECK 3: if either of these are true, then add small constant to eliminate errors from taking the log of lengths -------##
 table(data$LENGTH == 0)
 table(data$LENGTH == 1)
 
@@ -87,7 +92,7 @@ for(i in 1:nrow(data)){
 }
 
 
-data$Biomass <- (y)
+data$BIOMASS <- (y)
 head(data)
 
 # Export ####
@@ -100,7 +105,7 @@ save(data, file = " .RData")
 #----------------------------------------------#
 #Robinson, S. I., McLaughlin, Ó. B., Marteinsdóttir, B., & O’Gorman, E. J. (2018). Soil temperature effects on the structure and diversity of plant and invertebrate communities in a natural warming experiment. Journal of Animal Ecology, 87(3), 634–646. https://doi.org/10.1111/1365-2656.12798
 
-# McLaughlin OB, Jonsson T, Emmerson MC (2010). Temporal variability in predator-prey relationships of a forest floor food web. Adv. Ecol. Res., 42, 171-264.
+#McLaughlin OB, Jonsson T, Emmerson MC (2010). Temporal variability in predator-prey relationships of a forest floor food web. Adv. Ecol. Res., 42, 171-264.
 
 #Gruner DS (2003). Regressions of length and width to predict arthropod biomass in the Hawaiian Islands. Pacific Science, 57, 325-336.
 
